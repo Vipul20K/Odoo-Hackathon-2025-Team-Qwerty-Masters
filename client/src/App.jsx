@@ -28,6 +28,8 @@ function App() {
            <Route path="/add-question" element={<AddQuestion/>} />
            <Route path="/generate-otp" element={<GenerateOTP />} />
            <Route path="/verify-otp" element={<OTPVerification />} />
+      <Route path="/login" element={<div>login</div>}/>
+      <Route path='/questions/:id' element={<Detail/>}/>
     </Routes>
     </BrowserRouter>
   )

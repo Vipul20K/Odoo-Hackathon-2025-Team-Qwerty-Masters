@@ -24,11 +24,12 @@ const SignUpForm = () => {
 
     try {
       const res = await axios.post(
-        'http://localhost:5000/signup',
+        'https://odoo-hackathon-2025-team-qwerty-masters.onrender.com/api/v1/auth/signup',
         formData,
         { withCredentials: true }
       );
       console.log('Signup successful:', res.data);
+      alert('Signup successful! Please log in.');
       navigate('/login');
     } catch (err) {
       console.error('Signup error:', err.response?.data?.message || err.message);

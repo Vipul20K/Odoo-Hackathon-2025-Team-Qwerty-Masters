@@ -87,7 +87,7 @@ const AddQuestion = () => {
     };
 
     try {
-      const res = await fetch('http://localhost:5000/api/questions', {
+      const res = await fetch('https://odoo-hackathon-2025-team-qwerty-masters.onrender.com/api/v1/questions/createQuestion', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

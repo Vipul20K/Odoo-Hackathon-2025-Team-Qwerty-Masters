@@ -9,7 +9,21 @@ const fileUpload = require('express-fileupload');
 const profileRouter = require('./routes/profileRoute');
 const answerRouter = require('./routes/answerRoute');
 
+const notificationRouter = require('./routes/notificationRoute');
+const aiRouter = require('./routes/aiRoute');
+const cors = require('cors');
+
+app.use(cors({
+    origin: 'http://localhost:5173',
+    credentials: true,
+}))
+
 require("dotenv").config();
+const cors = require('cors');
+app.use(cors({
+  origin: 'http://localhost:5173',
+  credentials: true,
+}));
 
 dbConnect();
 connectCloudinary();
@@ -23,6 +37,9 @@ app.use('/api/v1/auth', authRouter);
 app.use('/api/v1/questions', questionRouter);
 app.use('/api/v1/profile', profileRouter);
 app.use('/api/v1/answers', answerRouter);
+app.use('/api/v1/notifications', notificationRouter);
+
+app.use('/api/v1/ai', aiRouter);
 
 app.get('/', (req, res) => {
     res.send('API running successfully');

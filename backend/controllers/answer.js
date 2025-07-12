@@ -1,6 +1,7 @@
 const Question = require('../models/Question');
 const Answer = require('../models/Answer');
 const User = require('../models/User');
+const Notification = require('../models/Notification');
 
 exports.addAnswer = async (req, res) => {
     const id = req.user.id;
@@ -30,6 +31,16 @@ exports.addAnswer = async (req, res) => {
         await User.findByIdAndUpdate(id, {
             $push: { answers: newAnswer._id }
         });
+        const Notification = require('../models/Notification');
+        const question = await Question.findById(questionId);
+        if (question && question.user.toString() !== id) {
+            await Notification.create({
+                recipient: question.user,
+                question: questionId,
+                answer: newAnswer._id,
+                user: id
+            });
+        }
         return res.status(201).json({
             success: true,
             message: 'Answer added successfully',
@@ -113,6 +124,58 @@ exports.deleteAnswer = async (req, res) => {
         return res.status(200).json({
             success: true,
             message: 'Answer deleted successfully'
+        });
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({
+            success: false,
+            message: 'Internal server error'
+        });
+    }
+}
+
+exports.upvoteAnswer = async (req, res) => {
+    const {answerId} = req.body;
+    const userId = req.user.id;
+    try {
+        const answer = await Answer.findById(answerId);
+        if (!answer) {
+            return res.status(404).json({
+                success: false,
+                message: 'Answer not found'
+            });
+        }
+        answer.upvotes.push(userId);
+        await answer.save();
+        return res.status(200).json({
+            success: true,
+            message: 'Answer upvoted successfully'
+        });
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({
+            success: false,
+            message: 'Internal server error'
+        });
+    }
+}
+
+exports.downvoteAnswer = async (req, res) => {
+    const {answerId} = req.body;
+    const userId = req.user.id;
+    try {
+        const answer = await Answer.findById(answerId);
+        if (!answer) {
+            return res.status(404).json({
+                success: false,
+                message: 'Answer not found'
+            });
+        }
+        answer.upvotes.pull(userId);
+        await answer.save();
+        return res.status(200).json({
+            success: true,
+            message: 'Answer downvoted successfully'
         });
     } catch (error) {
         console.error(error);

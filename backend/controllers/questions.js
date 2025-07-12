@@ -55,6 +55,7 @@ exports.createQuestion = async (req, res) => {
 }
 
 exports.getQuestions = async (req, res) => {
+  
     try {
         const questions = await Question.find()
             .populate('user', 'name')
@@ -112,6 +113,56 @@ exports.deleteQuestion = async (req, res) => {
         return res.status(200).json({
             success: true,
             message: 'Question deleted successfully'
+        });
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({
+            success: false,
+            message: 'Internal server error'
+        });
+    }
+}
+
+exports.upvoteQuestion = async (req, res) => {
+    const { id } = req.params;
+    try {
+        const question = await Question.findById(id);
+        if (!question) {
+            return res.status(404).json({
+                success: false,
+                message: 'Question not found'
+            });
+        }
+        question.upvotes.push(req.user.id);
+        await question.save();
+        return res.status(200).json({
+            success: true,
+            message: 'Question upvoted successfully'
+        });
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({
+            success: false,
+            message: 'Internal server error'
+        });
+    }
+}
+
+exports.downvoteQuestion = async (req, res) => {
+    const { id } = req.params;
+    try {
+        const question = await Question.findById(id);
+        if (!question) {
+            return res.status(404).json({
+                success: false,
+                message: 'Question not found'
+            });
+        }
+        question.upvotes.pull(req.user.id);
+        await question.save();
+        return res.status(200).json({
+            success: true,
+            message: 'Question downvoted successfully'
         });
     } catch (error) {
         console.error(error);

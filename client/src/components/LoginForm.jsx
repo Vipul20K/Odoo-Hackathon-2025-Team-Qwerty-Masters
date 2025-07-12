@@ -21,16 +21,32 @@ const LoginForm = () => {
 
     try {
       const res = await axios.post(
-        'http://localhost:5000/login',
+        'https://odoo-hackathon-2025-team-qwerty-masters.onrender.com/api/v1/auth/login',
         { email: formData.email, password: formData.password },
         { withCredentials: true }
       );
+
       console.log('Login successful:', res.data);
-      navigate('/dashboard'); // or your route
     } catch (err) {
-      console.error('Login error:', err.response?.data?.message || err.message);
-      alert(err.response?.data?.message || 'Login failed');
+      console.error('Login request failed:', err.response?.data || err.message);
+      alert('Login failed: ' + (err.response?.data?.message || err.message));
+      return;
     }
+
+    try {
+      await axios.post(
+        'https://odoo-hackathon-2025-team-qwerty-masters.onrender.com/api/v1/auth/generate-otp',
+        { email: formData.email },
+        { withCredentials: true }
+      );
+    } catch (err) {
+      console.error('OTP request failed:', err.response?.data || err.message);
+      alert('OTP request failed: ' + (err.response?.data?.message || err.message));
+      return;
+    }
+
+    // 🧭 Navigate to OTP Verification Page with email state
+    navigate('/verify-otp', { state: { email: formData.email } });
   };
 
   return (
