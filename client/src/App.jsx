@@ -2,7 +2,9 @@ import SignUpForm from "./components/SignUpForm"
 import LoginForm from "./components/LoginForm"
 import ProfilePage from "./components/ProfilePage"
 import AddQuestion from "./components/AddQuestion"
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import GenerateOTP from "./components/GenerateOTP"
+import OTPVerification from "./components/OTPVerification"
+
 import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import './index.css'
 import Homepage from './components/Homepage';
@@ -17,13 +19,15 @@ function App() {
     <Routes>
       <Route path="/" element={<Navigate to="/home" />} />
       <Route path="/home" element={<Homepage />} />
-      <Route path="/login" element={<div>login</div>}/>
+      {/* <Route path="/login" element={<div>login</div>}/> */}
       <Route path='/details/:id' element={<Detail/>}/>
 
        <Route path="/signup" element={<SignUpForm />} />
            <Route path="/login" element={<LoginForm />} />
            <Route path="/profile" element={<ProfilePage />} />
            <Route path="/add-question" element={<AddQuestion/>} />
+           <Route path="/generate-otp" element={<GenerateOTP />} />
+           <Route path="/verify-otp" element={<OTPVerification />} />
     </Routes>
     </BrowserRouter>
   )
