@@ -1,1 +1,11 @@
 @import "tailwindcss";
+/* @import "tailwindcss/preflight";
+@import "tailwindcss/utilities"; */
+
+.ProseMirror p.is-empty::before {
+  content: attr(data-placeholder);
+  color: #d1d5db; /* Tailwind gray-300 */
+  float: left;
+  height: 0;
+  pointer-events: none;
+}
