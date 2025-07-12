@@ -23,6 +23,10 @@ const questionSchema = new mongoose.Schema({
     image: {
         type: String, 
     },
+    answers: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Answer',
+    }],
     upvotes: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
@@ -31,4 +35,4 @@ const questionSchema = new mongoose.Schema({
     timestamps: true,
 });
 
-const Question = mongoose.model('Question', questionSchema);
+module.exports = mongoose.model('Question', questionSchema);
